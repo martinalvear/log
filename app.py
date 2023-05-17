@@ -20,20 +20,31 @@ def home():
     return render_template('index.html')
 
 
+@app.route('/rooms')
+def rooms():
+    return "ROOMS"
+
+
+#---ADMIN----
 @app.route('/admin')
 def admin():
     if session['id_rol'] == 1:
-        return 'HOLA MUNDI'
+        return render_template('admin.html')
     else:
-        return 'NO AUTORIZADO'
-    return render_template('admin.html')
+        return "NO AUTORIZADO"
 
-
+@app.route('/admin/rooms')
+def admin_rooms():
+    if session['id_rol'] == 1:
+        return "ROOMS ANDMIN"
+    else:
+        return "NO AUTORIZADO"
+#---------END ADMIN------
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')
-
+    flash('Sesión cerrada', 'success')
+    return redirect(url_for('home'))
 
 @app.route('/acceso-login', methods=["GET", "POST"])
 def login():
@@ -89,13 +100,13 @@ def register():
     return render_template('register.html', form=form)
 
 
-@app.route('/admin-user')
+@app.route('/admin/user')
 def admin_user():
     if session['id_rol'] == 1:
-        return render_template('admin-users.html')
+        return "USUARIOS"
     else:
         return 'NO AUTORIZADO'
-#qsedasdasdsad
+
 
 if __name__ == '__main__':
     app.secret_key = "pinchellave"
