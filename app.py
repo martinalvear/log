@@ -140,7 +140,23 @@ def delete_room(id_room):
     
         #--------------------------roooooooooooooooms-----------------------
         #--------------------------useeeeeeeeeeeeeers-----------------------
+@app.route('/admin/users')
+def admin_users():
+    if session['id_rol'] == 1:
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT * FROM usuarios")
 
+        user = cur.fetchall()
+
+        if result > 0:
+            return render_template('admin_users.html', user=user)
+        else:
+            msg = 'No se encontraron habitaciones'
+            return render_template('admin_rooms.html', msg=msg)
+        cur.close()
+    else:
+        return "NO AUTORIZADO"
+    return render_template('admin_users.html')
 
 
 

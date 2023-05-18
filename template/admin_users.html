@@ -41,6 +41,34 @@
                 </div>
             </div>
         </nav>
-        <h1>Administrar Usuarios</h1>
+
+        <div class="jumbotron text-center">
+            <h1>Administrar Usuarios</h1>
+        </div>
+        <a href="/add_user" class="btn btn-success right-aline" style="margin: 15px">Añadir usuario</a>
+        <table class="table table-striped">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Password</th>
+                <th>Rol</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for usuario in user %}
+            <tr>
+                <td>{{usuario.id}}</td>
+                <td>{{usuario.nombre}}</td>
+                <td>{{usuario.apellido}}</td>
+                <td>{{usuario.correo}}</td>
+                <td>{{usuario.password}}</td>
+                <td>{{usuario.id_rol}}</td>
+    
+            </tr>
+            {% endfor %}
+        </table>
+    
 
 </html>
