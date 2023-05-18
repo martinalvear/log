@@ -158,6 +158,24 @@ def admin_users():
         return "NO AUTORIZADO"
     return render_template('admin_users.html')
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        nombre = form.nombre.data
+        apellido = form.apellido.data
+        correo = form.correo.data
+        password = form.password.data
+        id_rol = form.id_rol.data
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO usuarios(nombre, apellido, correo, password, id_rol) VALUES(%s,%s,%s,%s,%s)",
+                    (nombre, apellido, correo, password, id_rol))
+        mysql.connection.commit()
+        cur.close()
+
+        return redirect(url_for('admin_users'))
+    return render_template('add_user.html', form=form)
+
 
 
 
