@@ -22,7 +22,17 @@ def home():
 
 @app.route('/rooms')
 def rooms():
-    return "ROOMS"
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT * FROM rooms")
+
+    room = cur.fetchall()
+
+    if result > 0:
+        return render_template('rooms.html', room=room)
+    else:
+        msg = 'No se encontraron habitaciones'
+        return render_template('rooms.html', msg=msg)
+    cur.close()
 
 
 #---ADMIN----
@@ -36,7 +46,17 @@ def admin():
 @app.route('/admin/rooms')
 def admin_rooms():
     if session['id_rol'] == 1:
-        return "ROOMS ANDMIN"
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT * FROM rooms")
+
+        room = cur.fetchall()
+
+        if result > 0:
+            return render_template('admin_rooms.html', room=room)
+        else:
+            msg = 'No se encontraron habitaciones'
+            return render_template('admin_rooms.html', msg=msg)
+        cur.close()
     else:
         return "NO AUTORIZADO"
 #---------END ADMIN------
