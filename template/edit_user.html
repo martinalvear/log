@@ -38,20 +38,23 @@
     </nav>
 
     {% block body %}
-        <h1>Editar habitación</h1>
+        <h1>Editar usuario</h1>
         {% from "includes/_formhelpers.html" import render_field %}
         <form method='POST' action="">
             <div class="form-group">
-                {{render_field(form.room_nombre, class_="form-control")}}
+                {{render_field(form.nombre, class_="form-control")}}
             </div>
             <div class="form-group">
-                {{render_field(form.capacidad, class_="form-control")}}
+                {{render_field(form.apellido, class_="form-control")}}
             </div>
             <div class="form-group">
-                {{render_field(form.ubicacion, class_="form-control")}}
+                {{render_field(form.correo, class_="form-control")}}
             </div>
-            <div class="form-group">
-                {{render_field(form.precio, class_="form-control")}}
+            <div class="form-group" required>
+                {{render_field(form.password, class_="form-control")}}
+            </div>
+            <div class="form-group" >
+                {{render_field(form.id_rol, class_="form-control")}}
             </div>
             <p><input type="submit" class="btn btn-primary" value="Editar"></p>
         </form>

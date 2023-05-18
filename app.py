@@ -55,7 +55,7 @@ def admin():
     if session['id_rol'] == 1:
         return render_template('admin.html')
     else:
-        return "NO AUTORIZADO"
+        return render_template('noautorizado.html')
         #--------------------------roooooooooooooooms-----------------------
 
 @app.route('/admin/rooms')
@@ -73,7 +73,7 @@ def admin_rooms():
             return render_template('admin_rooms.html', msg=msg)
         cur.close()
     else:
-        return "NO AUTORIZADO"
+        return render_template('noautorizado.html')
 @app.route('/add_room', methods=['GET', 'POST'])
 def add_room():
     if session['id_rol'] == 1:
@@ -91,7 +91,7 @@ def add_room():
             return redirect('/admin/rooms')
         return render_template('add_room.html', form=form)
     else:
-        return "NO AUTORIZADO"
+        return render_template('noautorizado.html')
 
 
 @app.route('/admin/edit_room/<string:id_room>', methods = ['GET','POST'])
@@ -122,7 +122,7 @@ def edit_room(id_room):
             return redirect('/admin/rooms')
         return render_template('edit_room.html', form=form)
     else:
-        return "NO AUTORIZADO"
+        return render_template('noautorizado.html')
 
 
 
@@ -136,7 +136,7 @@ def delete_room(id_room):
         cur.close()
         return redirect(url_for('admin_rooms'))
     else:
-        return "NO AUTORIZADO"
+        return render_template('noautorizado.html')
     
         #--------------------------roooooooooooooooms-----------------------
         #--------------------------useeeeeeeeeeeeeers-----------------------
@@ -155,7 +155,7 @@ def admin_users():
             return render_template('admin_rooms.html', msg=msg)
         cur.close()
     else:
-        return "NO AUTORIZADO"
+        return render_template('noautorizado.html')
     return render_template('admin_users.html')
 
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -177,7 +177,53 @@ def add_user():
     return render_template('add_user.html', form=form)
 
 
+@app.route('/admin/edit_user/<string:id>', methods = ['GET','POST'])
+def edit_user(id):
+    if session['id_rol'] == 1:
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT * FROM usuarios WHERE id = %s", [id])
+        user = cur.fetchone()
 
+        form = RegisterForm(request.form)
+
+        form.nombre.data = user['nombre']
+        form.apellido.data = user['apellido']
+        form.correo.data = user['correo']
+        form.password.data = user['password']
+        form.id_rol.data = user['id_rol']
+
+
+
+
+        if request.method == 'POST' and form.validate():
+            nombre = request.form['nombre']
+            apellido = request.form['apellido']
+            correo = request.form['correo']
+            password = request.form['password']
+            id_rol = request.form['id_rol']
+
+            cur.execute("UPDATE usuarios SET nombre = %s, apellido = %s, correo = %s, password = %s, id_rol = %s WHERE id = %s", (nombre, apellido, correo, password, id_rol, id))
+            mysql.connection.commit()
+            cur.close()
+
+            return redirect('/admin/users')
+        return render_template('edit_user.html', form=form)
+    else:
+        return render_template('noautorizado.html')
+
+
+
+@app.route('/admin/delete_user/<string:id>')
+def delete_user(id):
+    if session['id_rol'] == 1:
+
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM usuarios WHERE id = %s", [id])
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('admin_users'))
+    else:
+        return render_template('noautorizado.html')
 
 
 
