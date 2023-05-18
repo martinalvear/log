@@ -14,6 +14,20 @@ app.config['MYSQL_DB'] = 'flaskMVC'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
+class RegisterForm(Form):
+    nombre = StringField('Nombre')
+    apellido = StringField('Apellido')
+    correo = StringField('Correo')
+    password = PasswordField('Contraseña')
+    id_rol = StringField('Email')
+
+
+class RoomForm(Form):
+    room_nombre = StringField('Nombre de la habitacion')
+    capacidad = StringField('Capacidad')
+    ubicacion = StringField('Ubicación')
+    precio = StringField('Precio por noche')
+
 
 @app.route('/')
 def home():
@@ -42,6 +56,7 @@ def admin():
         return render_template('admin.html')
     else:
         return "NO AUTORIZADO"
+        #--------------------------roooooooooooooooms-----------------------
 
 @app.route('/admin/rooms')
 def admin_rooms():
@@ -59,6 +74,72 @@ def admin_rooms():
         cur.close()
     else:
         return "NO AUTORIZADO"
+@app.route('/add_room', methods=['GET', 'POST'])
+def add_room():
+    if session['id_rol'] == 1:
+
+        form = RoomForm(request.form)
+        if request.method == 'POST' and form.validate():
+            room_nombre = form.room_nombre.data
+            capacidad = form.capacidad.data
+            ubicacion = form.ubicacion.data
+            precio = form.precio.data
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio) VALUES(%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio))
+            mysql.connection.commit()
+            cur.close()
+            return redirect('/admin/rooms')
+        return render_template('add_room.html', form=form)
+    else:
+        return "NO AUTORIZADO"
+
+
+@app.route('/admin/edit_room/<string:id_room>', methods = ['GET','POST'])
+def edit_room(id_room):
+    if session['id_rol'] == 1:
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT * FROM rooms WHERE id_room = %s", [id_room])
+        room = cur.fetchone()
+
+        form = RoomForm(request.form)
+
+        form.room_nombre.data = room['room_nombre']
+        form.capacidad.data = room['capacidad']
+        form.ubicacion.data = room['ubicacion']
+        form.precio.data = room['precio']
+
+
+
+        if request.method == 'POST' and form.validate():
+            room_nombre = request.form['room_nombre']
+            capacidad = request.form['capacidad']
+            ubicacion = request.form['ubicacion']
+            precio = request.form['precio']
+            cur.execute("UPDATE rooms SET room_nombre = %s, capacidad = %s, ubicacion = %s, precio = %s WHERE id_room = %s", (room_nombre, capacidad, ubicacion, precio, id_room))
+            mysql.connection.commit()
+            cur.close()
+
+            return redirect('/admin/rooms')
+        return render_template('edit_room.html', form=form)
+    else:
+        return "NO AUTORIZADO"
+
+
+
+@app.route('/admin/delete_room/<string:id_room>')
+def delete_room(id_room):
+    if session['id_rol'] == 1:
+
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM rooms WHERE id_room = %s", [id_room])
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('admin_rooms'))
+    else:
+        return "NO AUTORIZADO"
+    
+        #--------------------------roooooooooooooooms-----------------------
+
 #---------END ADMIN------
 @app.route('/logout')
 def logout():
@@ -90,15 +171,6 @@ def login():
                 return render_template("user.html")
         else:
             return render_template('index.html', mensaje="Usuario O Contraseña Incorrectas")
-
-
-class RegisterForm(Form):
-    nombre = StringField('Nombre')
-    apellido = StringField('Apellido')
-    correo = StringField('Correo')
-    password = PasswordField('Contraseña')
-    id_rol = StringField('Email')
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
