@@ -281,13 +281,10 @@ def register():
         return redirect(url_for('home'))
     return render_template('register.html', form=form)
 
-
-@app.route('/admin/user')
-def admin_user():
-    if session['id_rol'] == 1:
-        return "USUARIOS"
-    else:
-        return 'NO AUTORIZADO'
+#--------------user---------------------------------------------------------------
+@app.route('/user', methods = ['GET'])
+def user():
+    return render_template('user.html')
 
 
 if __name__ == '__main__':
