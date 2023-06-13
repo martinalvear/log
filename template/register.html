@@ -7,6 +7,33 @@
     
 </head>
 <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/rooms">:)</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/user"></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rooms"></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-right">
+                    <li>
+                        <label style="color: whitesmoke;">¿Ya tienes cuenta? <a class="nav-link" aria-current="page" href="/">Iniciar sesión</a></label>
+                        
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
     <h1>Formulario de Registro</h1>
     <form method="POST" action="/register">
         <label for="nombre">Nombre:</label>
@@ -19,10 +46,12 @@
         <input type="password" id="password" name="password" required><br><br>
         <label for="id_rol">Rol:</label>
         <select name="id_rol" id="id_rol">
-            <option value="1">ADMIN</option>
             <option value="2">USER</option>
         </select>
-        <input type="submit" value="Registrarse">
+        <div>
+        <input class="btn btn-primary" type="submit" value="Registrarse">
+
+        </div>
     </form>
 </body>
 </html>

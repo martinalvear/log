@@ -27,6 +27,7 @@ class RoomForm(Form):
     capacidad = StringField('Capacidad')
     ubicacion = StringField('Ubicación')
     precio = StringField('Precio por noche')
+    imagenurl = StringField('Imagen URL')
 
 
 @app.route('/')
@@ -84,8 +85,9 @@ def add_room():
             capacidad = form.capacidad.data
             ubicacion = form.ubicacion.data
             precio = form.precio.data
+            imagenurl = form.imagenurl.data
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio) VALUES(%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio))
+            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio, imagenurl) VALUES(%s,%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio, imagenurl))
             mysql.connection.commit()
             cur.close()
             return redirect('/admin/rooms')
@@ -284,7 +286,13 @@ def register():
 #--------------user---------------------------------------------------------------
 @app.route('/user', methods = ['GET'])
 def user():
-    return render_template('user.html')
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT * FROM rooms WHERE idcalificacion>=3")
+
+    room = cur.fetchall()
+    return render_template('user.html', room=room)
+    cur.close()
+
 
 
 if __name__ == '__main__':

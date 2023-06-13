@@ -42,6 +42,56 @@
         </div>
     </nav>
     <h1 class="text-center">Bienvenido Usuario</h1>
+    <div class="text-center">
+        <button class="btn btn-success" href="">Ver todas las habitaciones</button>
+
+    </div>
+    <div>
+        <h1>Habitaciones mejores calificadas</h1>
+        <div class="row row-col-1 row-cols-sm-1 row-cols-md-3 row-cols-lg-4 mt-3">
+    
+            {% for habitacion in room %}
+    
+    
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="text-center">
+                        <div class="card-header">
+                            <h1>{{habitacion.room_nombre}}</h1>                    
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p>Capacidad de personas:
+                            {{habitacion.capacidad}}
+                        </p>
+    
+                        <p>Calificación
+                            {{habitacion.idcalificacion}}
+                        </p>
+                        <p>
+                            Precio:
+                            ${{habitacion.precio}}
+                        </p>
+                        <img src="{{habitacion.imagenurl}}" alt="imagen">
+                    </div>
+                    <div class="card-footer flex">
+                        
+    
+                        <form action="/rooms" method="GET">
+                            <button type="submit" class="btn btn-outline-success btn-sm">Ver</button>
+                        </form>
+                    </div>
+    
+                </div>
+            </div>
+            {% endfor %}
+    
+        </div>
+    
+        </div>
+    </div>
+    
 </body>
 
 </html>
