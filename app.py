@@ -109,6 +109,7 @@ def edit_room(id_room):
         form.capacidad.data = room['capacidad']
         form.ubicacion.data = room['ubicacion']
         form.precio.data = room['precio']
+        form.imagenurl.data = room['imagenurl']
 
 
 
@@ -117,7 +118,9 @@ def edit_room(id_room):
             capacidad = request.form['capacidad']
             ubicacion = request.form['ubicacion']
             precio = request.form['precio']
-            cur.execute("UPDATE rooms SET room_nombre = %s, capacidad = %s, ubicacion = %s, precio = %s WHERE id_room = %s", (room_nombre, capacidad, ubicacion, precio, id_room))
+            imagenurl = request.form['imagenurl']
+            
+            cur.execute("UPDATE rooms SET room_nombre = %s, capacidad = %s, ubicacion = %s, precio = %s, imagenurl= %s WHERE id_room = %s", (room_nombre, capacidad, ubicacion, precio, imagenurl, id_room))
             mysql.connection.commit()
             cur.close()
 
