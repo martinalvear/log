@@ -138,7 +138,7 @@ def delete_room(id_room):
     else:
         return render_template('noautorizado.html')
     
-        #--------------------------roooooooooooooooms-----------------------
+        #--------------------------end       roooooooooooooooms-----------------------
         #--------------------------useeeeeeeeeeeeeers-----------------------
 @app.route('/admin/users')
 def admin_users():

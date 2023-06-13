@@ -51,6 +51,7 @@
             <th>Capacidad</th>
             <th>Ubicación</th>
             <th>Precio por noche</th>
+            <th>Calificación</th>
             <th></th>
             <th></th>
         </tr>
@@ -61,6 +62,10 @@
             <td>{{habitacion.capacidad}}</td>
             <td>{{habitacion.ubicacion}}</td>
             <td>{{habitacion.precio}}</td>
+            <td>{{habitacion.idcalificacion}}</td>
+            <th><button class="btn btn-primary">Rentar</button></th>
+            <th><button class="btn btn-success">Calificar</button></th>
+
 
         </tr>
         {% endfor %}

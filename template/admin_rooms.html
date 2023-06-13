@@ -54,6 +54,7 @@
             <th>Capacidad</th>
             <th>Ubicación</th>
             <th>Precio por noche</th>
+            <th>Calificación</th>
             <th></th>
             <th></th>
         </tr>
@@ -64,6 +65,7 @@
             <td>{{habitacion.capacidad}}</td>
             <td>{{habitacion.ubicacion}}</td>
             <td>{{habitacion.precio}}</td>
+            <td>{{habitacion.idcalificacion}}</td>
 
             <td><a href="{{url_for('edit_room', id_room=habitacion.id_room)}}" id="{{habitacion.id_room}}"
                     class="btn btn-success pullright">Editar</a></td>
