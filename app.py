@@ -263,7 +263,19 @@ def login():
             if session['id_rol'] == 1:
                 return render_template("admin.html")
             elif session['id_rol'] == 2:
-                return render_template("user.html")
+                    cur = mysql.connection.cursor()
+                    result = cur.execute("SELECT * FROM rooms")
+
+                    room = cur.fetchall()
+
+                    if result > 0:
+                        return render_template('user.html', room=room)
+                    else:
+                        msg = 'No se encontraron habitaciones'
+                        return render_template('user.html', msg=msg)
+                    cur.close()
+
+            return render_template("user.html")
         else:
             return render_template('index.html', mensaje="Usuario O Contraseña Incorrectas")
 
@@ -290,7 +302,7 @@ def register():
 @app.route('/user', methods = ['GET'])
 def user():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT * FROM rooms WHERE idcalificacion>=3")
+    result = cur.execute("SELECT rooms.*, calificacion.calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room")
 
     room = cur.fetchall()
     return render_template('user.html', room=room)
