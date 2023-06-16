@@ -34,7 +34,7 @@
                 </ul>
                 <ul class="navbar-nav navbar-right">
                     <li>
-                        <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                        <a class="nav-link" aria-current="page" href="/logout">Salir</a>
                     </li>
                 </ul>
 
@@ -43,11 +43,11 @@
     </nav>
     <h1 class="text-center">Bienvenido Usuario</h1>
     <div class="text-center">
-        <button class="btn btn-success" href="/rooms">Ver todas las habitaciones</button>
+        <a class="btn btn-success" href="/rooms">Ver todas las habitaciones</a>
 
     </div>
     <div>
-        <h1>Habitaciones mejores calificadas</h1>
+        <h1>Habitaciones mejor calificadas</h1>
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-3 row-cols-lg-4 mt-3">
     
             {% for habitacion in room %}

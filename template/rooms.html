@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
-    <title>ROOMS ADMIN</title>
+    <title>ROOMS</title>
 </head>
 
 <body>
@@ -33,7 +33,7 @@
                 </ul>
                 <ul class="navbar-nav navbar-right">
                     <li>
-                        <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                        <a class="nav-link" aria-current="page" href="/logout">Salir</a>
                     </li>
                 </ul>
 
@@ -44,31 +44,45 @@
     <div class="jumbotron text-center">
         <h1>Habitaciones</h1>
     </div>
-    <table class="table table-striped">
-        <tr>
-            <th>ID</th>
-            <th>Nombre habitación</th>
-            <th>Capacidad</th>
-            <th>Ubicación</th>
-            <th>Precio por noche</th>
-            <th>Calificación</th>
-            <th></th>
-            <th></th>
-        </tr>
+    <div class="row row-col-1 row-cols-sm-1 row-cols-md-3 row-cols-lg-4 mt-3">
+    
         {% for habitacion in room %}
-        <tr>
-            <td>{{habitacion.id_room}}</td>
-            <td>{{habitacion.room_nombre}}</td>
-            <td>{{habitacion.capacidad}}</td>
-            <td>{{habitacion.ubicacion}}</td>
-            <td>{{habitacion.precio}}</td>
-            <td>{{habitacion.promedio_calificacion}}/5</td>
-            <th><button class="btn btn-primary">Rentar</button></th>
-            <th><button class="btn btn-success">Calificar</button></th>
 
 
-        </tr>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="text-center">
+                    <div class="card-header">
+                        <h1>{{habitacion.room_nombre}}</h1>                    
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <p>Capacidad de personas:
+                        {{habitacion.capacidad}}
+                    </p>
+
+                    <p>Calificación
+                        {{habitacion.promedio_calificacion}}/5
+                    </p>
+                    <p>
+                        Precio:
+                        ${{habitacion.precio}}
+                    </p>
+                    <img src="{{habitacion.imagenurl}}" alt="imagen">
+                </div>
+                <div class="card-footer d-flex justify-content-center">
+                    <form action="{{url_for('view_room',  id_room=habitacion.id_room)}}" method="GET">
+                        <button type="submit" class="btn btn-outline-success btn-block">Ver</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
         {% endfor %}
-    </table>
+
+    </div>
+
+    
 
 </body>
