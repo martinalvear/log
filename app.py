@@ -30,7 +30,7 @@ class RoomForm(Form):
     imagenurl = StringField('Imagen URL')
 
 
-@app.route('/')
+@app.route('/')  
 def home():
     return render_template('index.html')
 
