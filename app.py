@@ -38,7 +38,7 @@ def home():
 @app.route('/rooms')
 def rooms():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT * FROM rooms")
+    result = cur.execute("SELECT rooms.*, AVG(calificacion.calificacion) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
 
     room = cur.fetchall()
 
@@ -302,12 +302,19 @@ def register():
 @app.route('/user', methods = ['GET'])
 def user():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT rooms.*, calificacion.calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room")
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room > 3 GROUP BY rooms.id_room")
 
     room = cur.fetchall()
     return render_template('user.html', room=room)
     cur.close()
 
+@app.route('/room/<string:id_room>')
+def view_room(id_room):
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE rooms.id_room = %s GROUP BY rooms.id_room", [id_room])
+    room = cur.fetchall()
+    return render_template('view_room.html', room=room)
+    cur.close()
 
 
 if __name__ == '__main__':

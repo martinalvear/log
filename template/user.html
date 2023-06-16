@@ -43,7 +43,7 @@
     </nav>
     <h1 class="text-center">Bienvenido Usuario</h1>
     <div class="text-center">
-        <button class="btn btn-success" href="">Ver todas las habitaciones</button>
+        <button class="btn btn-success" href="/rooms">Ver todas las habitaciones</button>
 
     </div>
     <div>
@@ -67,7 +67,7 @@
                         </p>
     
                         <p>Calificación
-                            {{habitacion.calificacion}}
+                            {{habitacion.promedio_calificacion}}/5
                         </p>
                         <p>
                             Precio:
@@ -75,11 +75,9 @@
                         </p>
                         <img src="{{habitacion.imagenurl}}" alt="imagen">
                     </div>
-                    <div class="card-footer flex">
-                        
-    
-                        <form action="/rooms" method="GET">
-                            <button type="submit" class="btn btn-outline-success btn-sm">Ver</button>
+                    <div class="card-footer d-flex justify-content-center">
+                        <form action="{{url_for('view_room',  id_room=habitacion.id_room)}}" method="GET">
+                            <button type="submit" class="btn btn-outline-success btn-block">Ver</button>
                         </form>
                     </div>
     
