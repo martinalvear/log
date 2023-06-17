@@ -58,7 +58,7 @@ def admin():
         result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room < 3 GROUP BY rooms.id_room")
 
         room = cur.fetchall()
-        return render_template('user.html', room=room)
+        return render_template('admin.html', room=room)
         cur.close()
         return render_template('admin.html')
     else:
