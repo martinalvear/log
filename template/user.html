@@ -13,6 +13,12 @@
         crossorigin="anonymous"></script>
 
 </head>
+<style>
+    .imagen-40 {
+        max-height: 50px;
+        width: auto;
+    }
+</style>
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
@@ -73,7 +79,7 @@
                             Precio:
                             ${{habitacion.precio}}
                         </p>
-                        <img src="{{habitacion.imagenurl}}" alt="imagen">
+                        <img src="{{habitacion.imagenurl}}" class="imagen-40" alt="imagen">
                     </div>
                     <div class="card-footer d-flex justify-content-center">
                         <form action="{{url_for('view_room',  id_room=habitacion.id_room)}}" method="GET">

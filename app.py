@@ -18,8 +18,8 @@ class RegisterForm(Form):
     nombre = StringField('Nombre')
     apellido = StringField('Apellido')
     correo = StringField('Correo')
-    password = PasswordField('Contraseña')
-    id_rol = StringField('Email')
+    password = StringField('Contraseña')
+    id_rol = StringField('Rol')
 
 
 class RoomForm(Form):
