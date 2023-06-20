@@ -30,7 +30,7 @@ class RoomForm(Form):
     imagenurl = StringField('Imagen URL')
     imagenurl2 = StringField('Imagen URL 2')
     imagenurl3 = StringField('Imagen URL 3')
-    idcategoria = StringField('Categoria')
+    idcategoria = StringField('Categoria 1.Hotel 2.Hostal 3.Motel 4.Glamping')
 
 
 @app.route('/')  
@@ -41,7 +41,7 @@ def home():
 @app.route('/rooms')
 def rooms():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT rooms.*, AVG(calificacion.calificacion) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria GROUP BY rooms.id_room")
 
     room = cur.fetchall()
 
@@ -58,7 +58,7 @@ def rooms():
 def admin():
     if session['id_rol'] == 1:
         cur = mysql.connection.cursor()
-        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room < 3 GROUP BY rooms.id_room")
+        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria GROUP BY rooms.id_room")
 
         room = cur.fetchall()
         return render_template('admin.html', room=room)
@@ -72,7 +72,7 @@ def admin():
 def admin_rooms():
     if session['id_rol'] == 1:
         cur = mysql.connection.cursor()
-        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
+        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria GROUP BY rooms.id_room")
         room = cur.fetchall()
 
         if result > 0:

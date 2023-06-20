@@ -64,15 +64,11 @@
             </div>
             <div class="form-group">
 
-                <select name="idcategoria" id="idcategoria">
-                    <option value="1">Hotel</option>
-                    <option value="2">Hostal</option>
-                    <option value="3">Motel</option>
-                    <option value="4">Glamping</option>
-                </select>
+                {{render_field(form.idcategoria, class_="form-control")}}
+                
             </div>
             
-            <p><input type="submit" class="btn btn-primary" value="Editar"></p>
+            <p><input type="submit" class="btn btn-primary mt-3" value="Editar"></p>
         </form>
     {% endblock %}
     </html>
