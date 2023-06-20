@@ -12,6 +12,12 @@
         crossorigin="anonymous"></script>
     <title>ROOMS</title>
 </head>
+<style>
+    .imagen-40 {
+        max-height: 50px;
+        width: auto;
+    }
+</style>
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
@@ -23,7 +29,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="/user">Inicio</a>
                     </li>
@@ -45,7 +51,7 @@
         <h1>Habitaciones</h1>
     </div>
     <div class="row row-col-1 row-cols-sm-1 row-cols-md-3 row-cols-lg-4 mt-3">
-    
+
         {% for habitacion in room %}
 
 
@@ -53,10 +59,10 @@
             <div class="card">
                 <div class="text-center">
                     <div class="card-header">
-                        <h1>{{habitacion.room_nombre}}</h1>                    
+                        <h1>{{habitacion.room_nombre}}</h1>
                     </div>
                 </div>
-                
+
                 <div class="card-body">
                     <p>Capacidad de personas:
                         {{habitacion.capacidad}}
@@ -69,7 +75,12 @@
                         Precio:
                         ${{habitacion.precio}}
                     </p>
-                    <img src="{{habitacion.imagenurl}}" alt="imagen">
+                    <div class="justify-content-center">
+                        <img class="imagen-40" src="{{habitacion.imagenurl}}" alt="imagen">
+                        <img class="imagen-40" style="display: none;" src="{{habitacion.imagenurl2}}" alt="imagen2">
+                        <img class="imagen-40" style="display: none;" src="{{habitacion.imagenurl3}}" alt="imagen3">
+                    </div>
+
                 </div>
                 <div class="card-footer d-flex justify-content-center">
                     <form action="{{url_for('view_room',  id_room=habitacion.id_room)}}" method="GET">
@@ -83,6 +94,6 @@
 
     </div>
 
-    
+
 
 </body>

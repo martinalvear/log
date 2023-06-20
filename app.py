@@ -28,6 +28,9 @@ class RoomForm(Form):
     ubicacion = StringField('Ubicación')
     precio = StringField('Precio por noche')
     imagenurl = StringField('Imagen URL')
+    imagenurl2 = StringField('Imagen URL 2')
+    imagenurl3 = StringField('Imagen URL 3')
+    idcategoria = StringField('Categoria')
 
 
 @app.route('/')  
@@ -69,8 +72,7 @@ def admin():
 def admin_rooms():
     if session['id_rol'] == 1:
         cur = mysql.connection.cursor()
-        result = cur.execute("SELECT * FROM rooms")
-
+        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
         room = cur.fetchall()
 
         if result > 0:
@@ -92,8 +94,10 @@ def add_room():
             ubicacion = form.ubicacion.data
             precio = form.precio.data
             imagenurl = form.imagenurl.data
+            imagenurl2 = form.imagenurl.data
+            imagenurl3 = form.imagenurl.data
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio, imagenurl) VALUES(%s,%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio, imagenurl))
+            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3) VALUES(%s,%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3))
             mysql.connection.commit()
             cur.close()
             return redirect('/admin/rooms')
@@ -116,6 +120,9 @@ def edit_room(id_room):
         form.ubicacion.data = room['ubicacion']
         form.precio.data = room['precio']
         form.imagenurl.data = room['imagenurl']
+        form.imagenurl2.data = room['imagenurl2']
+        form.imagenurl3.data = room['imagenurl3']
+        form.idcategoria.data = room['idcategoria']
 
 
 
@@ -125,8 +132,11 @@ def edit_room(id_room):
             ubicacion = request.form['ubicacion']
             precio = request.form['precio']
             imagenurl = request.form['imagenurl']
+            imagenurl2 = request.form['imagenurl2']
+            imagenurl3 = request.form['imagenurl3']
+            idcategoria = request.form['idcategoria']
             
-            cur.execute("UPDATE rooms SET room_nombre = %s, capacidad = %s, ubicacion = %s, precio = %s, imagenurl= %s WHERE id_room = %s", (room_nombre, capacidad, ubicacion, precio, imagenurl, id_room))
+            cur.execute("UPDATE rooms SET room_nombre = %s, capacidad = %s, ubicacion = %s, precio = %s, imagenurl= %s, imagenurl2 = %s, imagenurl3 = %s, idcategoria = %s WHERE id_room = %s", (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3, idcategoria, id_room))
             mysql.connection.commit()
             cur.close()
 
