@@ -277,10 +277,23 @@ def login():
             session['id_rol'] = account['id_rol']
 
             if session['id_rol'] == 1:
-                return render_template("admin.html")
+                    cur = mysql.connection.cursor()
+                    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
+
+                    room = cur.fetchall()
+
+                    if result > 0:
+                        return render_template('admin.html', room=room)
+                    else:
+                        msg = 'No se encontraron habitaciones'
+                        return render_template('admin.html', msg=msg)
+                    cur.close()
+
+                    return render_template("admin.html")
+                    return render_template("admin.html")
             elif session['id_rol'] == 2:
                     cur = mysql.connection.cursor()
-                    result = cur.execute("SELECT * FROM rooms")
+                    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
 
                     room = cur.fetchall()
 

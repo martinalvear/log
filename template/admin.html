@@ -14,6 +14,12 @@
 
 </head>
 
+<style>
+    .imagen-40 {
+        max-height: 100px;
+        width: auto;
+    }
+</style>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
         <div class="container-fluid">
@@ -80,12 +86,14 @@
                                 Precio:
                                 ${{habitacion.precio}}
                             </p>
-                            <img src="{{habitacion.imagenurl}}" alt="imagen">
+                            <div class="d-flex justify-content-center">
+                                <img class="imagen-40" src="{{habitacion.imagenurl}}" alt="imagen">
+                            </div>
+                            
                         </div>
                         <div class="card-footer d-flex justify-content-center">
-                            <form action="{{url_for('view_room',  id_room=habitacion.id_room)}}" method="GET">
-                                <button type="submit" class="btn btn-outline-success btn-block">Ver</button>
-                            </form>
+                            <a href="{{url_for('edit_room', id_room=habitacion.id_room)}}" id="{{habitacion.id_room}}"
+                    class="btn btn-outline-primary pullright">Editar</a>
                         </div>
         
                     </div>
