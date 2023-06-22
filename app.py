@@ -278,7 +278,7 @@ def login():
 
             if session['id_rol'] == 1:
                     cur = mysql.connection.cursor()
-                    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
+                    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room < 3 GROUP BY rooms.id_room")
 
                     room = cur.fetchall()
 
@@ -293,7 +293,7 @@ def login():
                     return render_template("admin.html")
             elif session['id_rol'] == 2:
                     cur = mysql.connection.cursor()
-                    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room GROUP BY rooms.id_room")
+                    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room > 3 GROUP BY rooms.id_room")
 
                     room = cur.fetchall()
 
