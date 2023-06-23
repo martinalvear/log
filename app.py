@@ -340,10 +340,32 @@ def user():
 @app.route('/room/<string:id_room>')
 def view_room(id_room):
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE rooms.id_room = %s GROUP BY rooms.id_room", [id_room])
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria WHERE rooms.id_room = %s GROUP BY rooms.id_room", [id_room])
+    
     room = cur.fetchall()
     return render_template('view_room.html', room=room)
     cur.close()
+
+@app.route('/formulariocalificacion', methods=['GET'])
+def mostrar_formulario():
+    
+    return render_template('calificacion.html')
+
+@app.route('/calificaciones', methods=['GET','POST'])
+def insertar_calificacion():
+    calificacion = request.form.get('calificacion')
+    id = request.form.get('idusuario')
+    id_room = request.form.get('idhabitacion')
+
+    # Aquí puedes realizar las operaciones necesarias para insertar la calificación en tu base de datos
+
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO calificacion(calificacion, id, id_room) VALUES(%s,%s,%s)",
+                    (calificacion, id, id_room))
+    mysql.connection.commit()
+    cur.close()
+    return render_template('exitoso.html')
+
 
 
 if __name__ == '__main__':
