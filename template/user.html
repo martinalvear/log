@@ -15,12 +15,12 @@
 </head>
 <style>
     .imagen-40 {
-    display: block;
-    max-height: 100px;
-    width: auto;
-    margin-left: auto;
-    margin-right: auto;
-}
+        display: block;
+        max-height: 100px;
+        width: auto;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 
 <body>
@@ -50,32 +50,33 @@
             </div>
         </div>
     </nav>
-    <h1 class="text-center">Bienvenido Usuario</h1>
+
+    <h1 class="text-center">Bienvenido Usuario </h1>
     <div class="text-center">
         <a class="btn btn-success" href="/rooms">Ver todas las habitaciones</a>
-
     </div>
+
     <div>
         <h1>Habitaciones mejor calificadas</h1>
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-3 row-cols-lg-4 mt-3">
-    
+
             {% for habitacion in room %}
-    
-    
+
+
             <div class="col-md-3">
                 <div class="card">
                     <div class="text-center">
                         <div class="card-header">
                             <h1>{{habitacion.room_nombre}}</h1>
-                            <h4>{{habitacion.categoria}}</h4>                   
+                            <h4>{{habitacion.categoria}}</h4>
                         </div>
                     </div>
-                    
+
                     <div class="card-body">
                         <p>Capacidad de personas:
                             {{habitacion.capacidad}}
                         </p>
-    
+
                         <p>Calificación
                             {{habitacion.promedio_calificacion}}/5
                         </p>
@@ -90,16 +91,16 @@
                             <button type="submit" class="btn btn-outline-success btn-block">Ver</button>
                         </form>
                     </div>
-    
+
                 </div>
             </div>
             {% endfor %}
-    
+
         </div>
-    
-        </div>
+
     </div>
-    
+    </div>
+
 </body>
 
 </html>

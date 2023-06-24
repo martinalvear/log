@@ -59,12 +59,11 @@ def rooms():
 def admin():
     if session['id_rol'] == 1:
         cur = mysql.connection.cursor()
-        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria GROUP BY rooms.id_room")
+        result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria GROUP BY rooms.id_room HAVING promedio_calificacion <= 2;")
 
         room = cur.fetchall()
         return render_template('admin.html', room=room)
         cur.close()
-        return render_template('admin.html')
     else:
         return render_template('noautorizado.html')
         #--------------------------roooooooooooooooms-----------------------
@@ -95,10 +94,12 @@ def add_room():
             ubicacion = form.ubicacion.data
             precio = form.precio.data
             imagenurl = form.imagenurl.data
-            imagenurl2 = form.imagenurl.data
-            imagenurl3 = form.imagenurl.data
+            imagenurl2 = form.imagenurl2.data
+            imagenurl3 = form.imagenurl3.data
+            idcategoria = form.idcategoria.data
+
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3) VALUES(%s,%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3))
+            cur.execute("INSERT INTO rooms (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3, idcategoria) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (room_nombre, capacidad, ubicacion, precio, imagenurl, imagenurl2, imagenurl3, idcategoria))
             mysql.connection.commit()
             cur.close()
             return redirect('/admin/rooms')
@@ -173,7 +174,7 @@ def admin_users():
         if result > 0:
             return render_template('admin_users.html', user=user)
         else:
-            msg = 'No se encontraron habitaciones'
+            msg = 'No se encontraron usuarios'
             return render_template('admin_rooms.html', msg=msg)
         cur.close()
     else:
@@ -332,8 +333,7 @@ def register():
 @app.route('/user', methods=['GET'])
 def user():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room > 3 GROUP BY rooms.id_room ORDER BY promedio_calificacion DESC")
-
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room > 3 GROUP BY rooms.id_room HAVING promedio_calificacion > 3.5 ORDER BY promedio_calificacion DESC;")
     room = cur.fetchall()
     cur.close()
 
