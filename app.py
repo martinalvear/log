@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template, request, redirect, Response, url_for, session, flash
+from flask_login import current_user
 from flask_mysqldb import MySQL, MySQLdb  # pip install Flask-MySQLdb
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -328,14 +329,16 @@ def register():
     return render_template('register.html', form=form)
 
 #--------------user---------------------------------------------------------------
-@app.route('/user', methods = ['GET'])
+@app.route('/user', methods=['GET'])
 def user():
     cur = mysql.connection.cursor()
-    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room > 3 GROUP BY rooms.id_room")
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.id_room > 3 GROUP BY rooms.id_room ORDER BY promedio_calificacion DESC")
 
     room = cur.fetchall()
-    return render_template('user.html', room=room)
     cur.close()
+
+    return render_template('user.html', room=room)
+
 
 @app.route('/room/<string:id_room>')
 def view_room(id_room):
