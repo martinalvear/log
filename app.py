@@ -357,17 +357,38 @@ def mostrar_formulario():
 @app.route('/calificaciones', methods=['GET','POST'])
 def insertar_calificacion():
     calificacion = request.form.get('calificacion')
+    fecha = request.form.get('fecha')
     id = request.form.get('idusuario')
     id_room = request.form.get('idhabitacion')
 
     # Aquí puedes realizar las operaciones necesarias para insertar la calificación en tu base de datos
 
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO calificacion(calificacion, id, id_room) VALUES(%s,%s,%s)",
-                    (calificacion, id, id_room))
+    cur.execute("INSERT INTO calificacion(calificacion, fecha, id, id_room) VALUES(%s,%s,%s,%s)",
+                    (calificacion, fecha, id, id_room))
     mysql.connection.commit()
     cur.close()
     return render_template('exitoso.html')
+
+@app.route('/mejores_habitaciones', methods=['POST'])
+def mostrar_habitaciones_mejor_calificadas():
+    fecha_inicio = request.form.get('fecha_inicio')
+    fecha_fin = request.form.get('fecha_fin')
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.fecha BETWEEN %s AND %s GROUP BY rooms.id_room ORDER BY promedio_calificacion DESC", (fecha_inicio, fecha_fin))
+    room = cur.fetchall()
+    cur.close()
+
+    return render_template('habitaciones.html', room=room)
+
+@app.route('/buscar_calificaciones', methods=['GET'])
+def mostrar_formulario_busqueda():
+    return render_template('formulario_busqueda.html')
+
+
+
+
+
 
 
 
