@@ -385,38 +385,39 @@ def mostrar_formulario_busqueda():
     return render_template('formulario_busqueda.html')
 
 
+
+
 ##
 @app.route('/api/rooms', methods=['GET'])
 def get_rooms():
     cur = mysql.connection.cursor()
-    result = cur.execute("""
-        SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria
-        FROM rooms
-        LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room
-        JOIN categorias ON rooms.idcategoria = categorias.idcategoria
-        GROUP BY rooms.id_room
-    """)
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room JOIN categorias ON rooms.idcategoria = categorias.idcategoria GROUP BY rooms.id_room")
 
     room_data = cur.fetchall()
-    rooms = []
-    if result > 0:
-        for row in room_data:
-            room = {
-                'id_room': row[0],
-                'nombre': row[1],
-                'descripcion': row[2],
-                'precio': row[3],
-                'promedio_calificacion': row[4],
-                'categoria': row[5]
-            }
-            rooms.append(room)
-
     cur.close()
 
-    if len(rooms) > 0:
-        return jsonify(rooms)
-    else:
-        return jsonify({'mensaje': 'No se encontraron habitaciones'})
+    return jsonify(room_data)
+
+@app.route('/api/users')
+def get_users():
+    
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT * FROM usuarios")
+
+    user = cur.fetchall()
+    cur.close()
+    return jsonify(user)
+
+@app.route('/api/mejores_habitaciones', methods=['GET'])
+def get_mostrar_habitaciones_mejor_calificadas():
+    fecha_inicio = request.form.get('fecha_inicio')
+    fecha_fin = request.form.get('fecha_fin')
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion FROM rooms LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room WHERE calificacion.fecha BETWEEN %s AND %s GROUP BY rooms.id_room ORDER BY promedio_calificacion DESC", (fecha_inicio, fecha_fin))
+    room = cur.fetchall()
+    cur.close()
+
+    return jsonify(room)
 
 
 
