@@ -1,6 +1,5 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask import render_template, request, redirect, Response, url_for, session, flash
-from flask_login import current_user
 from flask_mysqldb import MySQL, MySQLdb  # pip install Flask-MySQLdb
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -386,7 +385,38 @@ def mostrar_formulario_busqueda():
     return render_template('formulario_busqueda.html')
 
 
+##
+@app.route('/api/rooms', methods=['GET'])
+def get_rooms():
+    cur = mysql.connection.cursor()
+    result = cur.execute("""
+        SELECT rooms.*, ROUND(AVG(calificacion.calificacion), 1) AS promedio_calificacion, categorias.categoria
+        FROM rooms
+        LEFT JOIN calificacion ON rooms.id_room = calificacion.id_room
+        JOIN categorias ON rooms.idcategoria = categorias.idcategoria
+        GROUP BY rooms.id_room
+    """)
 
+    room_data = cur.fetchall()
+    rooms = []
+    if result > 0:
+        for row in room_data:
+            room = {
+                'id_room': row[0],
+                'nombre': row[1],
+                'descripcion': row[2],
+                'precio': row[3],
+                'promedio_calificacion': row[4],
+                'categoria': row[5]
+            }
+            rooms.append(room)
+
+    cur.close()
+
+    if len(rooms) > 0:
+        return jsonify(rooms)
+    else:
+        return jsonify({'mensaje': 'No se encontraron habitaciones'})
 
 
 
