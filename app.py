@@ -4,8 +4,13 @@ from flask_mysqldb import MySQL, MySQLdb  # pip install Flask-MySQLdb
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+from flask_cors import CORS
+
+
 
 app = Flask(__name__, template_folder='template')
+cors = CORS(app)
+
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
